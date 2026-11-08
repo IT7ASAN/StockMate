@@ -1,0 +1,349 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+  <meta name="theme-color" content="#fff7eb">
+  <meta name="description" content="العصائر لإدارة منتجات العصائر والمخزون">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <link rel="stylesheet" href="styles.css">
+  <title>العصائر | إدارة المخزون</title>
+</head>
+<body>
+<header class="topbar">
+  <a class="brand" href="#home" data-go="home" aria-label="العصائر - الرئيسية">
+    <span class="brand-mark" aria-hidden="true">🍊</span><span><b>العصائر</b><small>مخزونك مرتب دائماً</small></span>
+  </a>
+  <div class="top-actions"><span class="connection"><i></i> يعمل محلياً</span><button class="icon-btn" id="notifyBtn" title="التنبيهات" aria-label="تفعيل التنبيهات">♧</button></div>
+</header>
+<div class="app-shell">
+  <aside class="side-nav" aria-label="التنقل الرئيسي">
+    <div class="side-label">القائمة الرئيسية</div>
+    <button class="nav-item active" data-page="home"><span class="nav-icon">⌂</span><span>الرئيسية</span></button>
+    <button class="nav-item" data-page="products"><span class="nav-icon">▦</span><span>المنتجات</span></button>
+    <button class="nav-item" data-page="scan"><span class="nav-icon">▥</span><span>مسح الباركود</span></button>
+    <button class="nav-item" data-page="replenish"><span class="nav-icon">↗</span><span>التعبئة</span></button>
+    <button class="nav-item" data-page="movement"><span class="nav-icon">⇄</span><span>الحركات</span></button>
+    <button class="nav-item" data-page="more"><span class="nav-icon">•••</span><span>المزيد</span></button>
+    <div class="side-foot"><span class="status-dot"></span> البيانات محفوظة على هذا الجهاز</div>
+  </aside>
+
+  <main>
+    <section class="page active" id="page-home">
+      <div class="welcome home-welcome"><div><span class="eyebrow">مساحة العمل</span><h1>صباح الخير 👋</h1><p>مخزونك واضح ومنظم — إليك ملخص اليوم.</p></div><div class="date-pill" id="today"></div></div>
+      <div class="home-banner"><div><span>لوحة إدارة العصائر</span><b>كل منتجاتك وحركاتك في مكان واحد</b><small>تابع الكميات، راجع النواقص، وحدّث المخزون بسرعة.</small></div><button class="home-add-button" data-action="add-product" type="button">＋ إضافة منتج</button></div>
+      <div class="stats">
+        <article class="stat"><div class="stat-icon blue">▦</div><span>كل المنتجات</span><strong id="totalProducts">0</strong><small>منتج مسجل</small></article>
+        <article class="stat"><div class="stat-icon orange">⌁</div><span>نواقص البراد</span><strong id="lowCount">0</strong><small>تحتاج تعبئة</small></article>
+        <article class="stat"><div class="stat-icon red">◷</div><span>صلاحية قريبة</span><strong id="expiryCount">0</strong><small>خلال 30 يوماً أو منتهية</small></article>
+        <article class="stat"><div class="stat-icon green">✓</div><span>مهام التعبئة</span><strong id="taskCount">0</strong><small>منتج يحتاج متابعة</small></article>
+      </div>
+      <div class="section-head"><div><h2>تحتاج انتباهك</h2><p>النواقص والصلاحيات القريبة</p></div><button class="text-btn" data-go="alerts">عرض الكل ←</button></div>
+      <div id="homeAlerts" class="stack empty-state">لا توجد تنبيهات حالياً.</div>
+      <div class="section-head"><div><h2>اختصارات سريعة</h2><p>أنجز المهام اليومية بخطوات أقل</p></div></div>
+      <div class="quick-grid">
+        <button class="quick" data-action="add-product"><span class="quick-icon">＋</span><b>إضافة منتج</b><small>سجّل مشروباً جديداً</small></button>
+        <button class="quick" data-go="scan"><span class="quick-icon">▥</span><b>مسح باركود</b><small>اعثر على المنتج بسرعة</small></button>
+        <button class="quick" data-go="replenish"><span class="quick-icon">↗</span><b>قائمة التعبئة</b><small>رتّب جولة المخزن</small></button>
+        <button class="quick" data-go="map"><span class="quick-icon">⌖</span><b>الرفوف</b><small>اعرف مكان كل منتج</small></button>
+      </div>
+      <div class="section-head"><div><h2>آخر الحركات</h2><p>أحدث التحديثات على المخزون</p></div><button class="text-btn" data-page="movement">عرض الحركات ←</button></div>
+      <div id="homeRecentMovements" class="home-recent-movements empty-state">لا توجد حركات مسجلة بعد.</div>
+      <div class="note"><b>حافظ على بياناتك</b><p>البيانات والصور محفوظة محلياً على هذا الجهاز. أنشئ نسخة احتياطية دورية من صفحة الإعدادات.</p></div>
+    </section>
+
+    <section class="page" id="page-products">
+      <div class="page-title"><div><span class="eyebrow">كتالوج المخزون</span><h1>المنتجات</h1><p>كل أصناف المشروبات في مكان واحد.</p></div><button class="primary" id="addProductBtn">＋ إضافة منتج</button></div>
+      <div class="page-help"><b>طريقة الاستخدام</b><span>أضف المنتج ومعلوماته وكمياته، واختر الرف والقسم المناسبين. استخدم البحث والفلاتر للعثور عليه وتحديثه.</span></div>
+      <div class="search-wrap"><span>⌕</span><input id="productSearch" type="search" placeholder="بحث شامل: الاسم، النكهة، الباركود، الكمية، الموقع..." autocomplete="off" aria-label="بحث شامل في بيانات المنتجات"></div>
+      <p class="search-hint">يشمل البحث كل تفاصيل المنتج وموقعه وكمياته وملاحظاته.</p>
+      <div class="filter-row"><button class="filter active" data-filter="all">الكل</button><button class="filter" data-filter="low">نقص البراد</button><button class="filter" data-filter="fixed">موقع ثابت</button><button class="filter" data-filter="variable">موقع متغير</button></div>
+      <div id="productList" class="stack empty-state">لا توجد منتجات بعد. أضف أول منتج للبدء.</div>
+    </section>
+
+    <section class="page" id="page-scan">
+      <div class="page-title"><div><span class="eyebrow">تعرف سريع</span><h1>مسح الباركود</h1><p>امسح الرمز للوصول إلى بيانات المنتج أو تسجيل حركة.</p></div></div>
+      <div class="page-help"><b>طريقة الاستخدام</b><span>امسح الرمز بالكاميرا أو اختر صورة، وستظهر بيانات المنتج وسعره وصلاحيته مباشرة. ويمكنك البحث عن الرمز يدوياً.</span></div>
+      <div class="scanner-panel barcode-scanner-card">
+        <div class="scanner-visual"><div class="scan-frame"><span></span><i></i></div><div class="scanner-caption">وجّه الكاميرا نحو الباركود</div></div>
+        <video id="scannerVideo" playsinline muted class="scanner-video hidden"></video>
+        <div class="scanner-actions"><button class="primary" id="startScanBtn">▥ تشغيل الكاميرا</button><button class="soft hidden" id="stopScanBtn">إيقاف الكاميرا</button><label class="upload-btn">▧ اختيار صورة<input id="scanImage" type="file" accept="image/*" capture="environment"></label></div>
+        <p id="scannerStatus" class="hint">امسح الباركود بالكاميرا أو اختر صورة واضحة للرمز.</p>
+      </div>
+      <form id="barcodeLookupForm" class="panel lookup-panel barcode-lookup"><label>البحث برقم الباركود<input id="scanCode" inputmode="numeric" pattern="[0-9]*" autocomplete="off" placeholder="اكتب أو امسح رقم الباركود"></label><button class="primary" type="submit">بحث عن المنتج ←</button></form>
+      <div class="barcode-result-heading"><span>نتيجة المسح</span><small>السعر والصلاحية والمخزون</small></div>
+      <div id="scanResult" class="scan-result empty-state">ستظهر تفاصيل المنتج هنا بعد المسح أو البحث.</div>
+    </section>
+
+    <section class="page" id="page-replenish">
+      <div class="page-title"><div><span class="eyebrow">جولة المخزن</span><h1>قائمة التعبئة</h1><p>مرتبة حسب مواقع الرفوف لتقليل وقت البحث.</p></div><button class="soft" id="refreshTasks">تحديث</button></div>
+      <div class="page-help"><b>طريقة الاستخدام</b><span>ابحث عن المنتج، راجع الكمية المقترحة والرصيد، ثم سجّل النقل بعد تنفيذه فعلياً. إذا كان المخزن فارغاً انتقل مباشرة لإضافة الكمية.</span></div>
+      <div class="summary-strip replenish-summary"><div><b id="replenishItems">0</b><span>منتج يحتاج تعبئة</span></div><div><b id="replenishUnits">0</b><span>قطعة متاحة للنقل</span></div><div><b id="shortageUnits">0</b><span>قطعة عجز بالمخزن</span></div></div>
+      <div class="search-wrap replenish-search"><span>⌕</span><input id="replenishSearch" type="search" placeholder="ابحث باسم المنتج أو النكهة أو الموقع" autocomplete="off" aria-label="بحث في منتجات التعبئة"></div>
+      <p class="search-hint">تظهر المنتجات التي تحتاج إلى تعبئة فقط. الكمية المقترحة تحسب تلقائياً حسب حاجة البراد ورصيد المخزن.</p>
+      <div id="replenishList" class="stack empty-state">لا توجد نواقص حالياً.</div>
+    </section>
+
+    <section class="page" id="page-movement">
+      <div class="page-title"><div><span class="eyebrow">تحديث المخزون</span><h1>الحركات</h1><p>سجّل كل إضافة أو نقل أو سحب بدقة.</p></div></div>
+      <div class="page-help"><b>تسجيل حركة بسهولة</b><span>حدد نوع الحركة، وابحث عن المنتج واختره من النتائج، ثم أدخل الكمية وسجّل. ستظهر الأرصدة المتوقعة قبل الحفظ.</span></div>
+      <form id="movementForm" class="panel movement-form">
+        <div class="movement-form-heading"><span class="movement-step">١</span><div><b>نوع الحركة</b><small>اختر ما تريد تسجيله</small></div></div>
+        <div class="movement-types" role="group" aria-label="نوع الحركة">
+          <button type="button" class="movement-type active" data-movement-type="transfer">نقل من المخزن إلى البراد</button>
+          <button type="button" class="movement-type" data-movement-type="addStore">إضافة إلى المخزن</button>
+          <button type="button" class="movement-type" data-movement-type="removeFridge">سحب من البراد</button>
+        </div>
+        <select id="movementType" class="visually-hidden" aria-hidden="true" tabindex="-1"><option value="transfer">نقل من المخزن إلى البراد</option><option value="addStore">إضافة إلى المخزن</option><option value="removeFridge">سحب من البراد</option></select>
+        <div class="movement-form-heading"><span class="movement-step">٢</span><div><b>اختر المنتج</b><small>اكتب الاسم أو النكهة أو الباركود</small></div></div>
+        <div class="movement-product-picker full" id="movementProductPicker">
+          <label for="movementProductSearch">البحث عن المنتج</label>
+          <input id="movementProductSearch" type="search" autocomplete="off" placeholder="مثال: برتقال، 250 مل، أو رقم الباركود" role="combobox" aria-autocomplete="list" aria-controls="movementProductResults" aria-expanded="false">
+          <div id="movementProductResults" class="movement-product-results" role="listbox" aria-label="نتائج المنتجات"></div>
+          <select id="movementProduct" class="visually-hidden" aria-hidden="true" tabindex="-1"><option value="">اختر المنتج</option></select>
+          <div id="movementSelectedProduct" class="movement-selected-product" aria-live="polite">لم يتم اختيار منتج بعد</div>
+        </div>
+        <div class="movement-form-heading"><span class="movement-step">٣</span><div><b>الكمية والتفاصيل</b><small>راجع الرصيد المتوقع قبل التسجيل</small></div></div>
+        <div class="movement-quantity" id="movementQuantity">
+          <label for="movementQty">الكمية</label>
+          <div class="quantity-control"><button type="button" id="qtyMinus" aria-label="تقليل الكمية">−</button><input id="movementQty" type="number" inputmode="numeric" pattern="[0-9]*" min="1" step="1" value="1" required><button type="button" id="qtyPlus" aria-label="زيادة الكمية">+</button></div>
+          <label class="unit-control">الوحدة<select id="movementUnit"><option value="piece">قطعة</option><option value="carton">كرتون</option></select></label>
+          <label id="cartonSizeWrap">قطعة بالصندوق<input id="cartonSize" type="number" inputmode="numeric" pattern="[0-9]*" min="1" step="1" value="1" readonly></label>
+        </div>
+        <div id="movementPreview" class="movement-preview">اختر منتجاً لعرض الكمية المتاحة.</div>
+        <label class="full">اسم المنفذ <span class="optional-label">(اختياري)</span><input id="movementActor" autocomplete="name" placeholder="اسم الموظف"></label>
+        <label class="full">ملاحظة <span class="optional-label">(اختياري)</span><input id="movementNote" placeholder="مثلاً: تعبئة الوردية الصباحية"></label>
+        <button class="primary full" type="submit" id="saveMovementBtn">تسجيل الحركة</button>
+        <button class="soft full" type="button" data-go="stocktake">بدء جرد فعلي مرتبط بأرصدة المنتجات</button>
+      </form>
+      <div class="section-head"><div><h2>سجل الحركات</h2><p>ابحث وراجع آخر تغييرات المخزون</p></div></div>
+      <div class="search-wrap movement-history-search"><span>⌕</span><input id="movementHistorySearch" type="search" placeholder="ابحث باسم المنتج أو نوع الحركة أو الملاحظة" autocomplete="off" aria-label="بحث في سجل الحركات"></div>
+      <div class="movement-history-filters" role="group" aria-label="تصفية سجل الحركات">
+        <button type="button" class="filter active" data-movement-filter="all">الكل</button>
+        <button type="button" class="filter" data-movement-filter="transfer">نقل وتعبئة</button>
+        <button type="button" class="filter" data-movement-filter="add">إضافة للمخزن</button>
+        <button type="button" class="filter" data-movement-filter="remove">سحب</button>
+        <button type="button" class="filter" data-movement-filter="adjust">جرد</button>
+      </div>
+      <div id="movementHistory" class="stack empty-state">لا توجد حركات مسجلة.</div>
+    </section>
+
+    <section class="page" id="page-more">
+      <div class="page-title"><div><span class="eyebrow">إدارة التطبيق</span><h1>المزيد</h1><p>أدوات إضافية لإدارة المخزن.</p></div></div>
+      <div class="page-help"><b>عن هذه الصفحة</b><span>افتح الرفوف لمراجعة مواقع المنتجات، أو التنبيهات لمتابعة النواقص والصلاحيات، أو الإعدادات للنسخ الاحتياطي.</span></div>
+      <div class="more-grid">
+        <button class="more-card" data-go="map"><span>⌖</span><b>الرفوف والأقسام</b><small>تنظيم الأقسام والمنتجات في رفّي المخزن</small><i>←</i></button>
+        <button class="more-card" data-go="reports"><span>▥</span><b>تقارير المخزون</b><small>الصلاحيات والركود والنقص والتالف</small><i>←</i></button>
+        <button class="more-card" data-go="alerts"><span>♧</span><b>التنبيهات</b><small>النواقص والصلاحيات</small><i>←</i></button>
+        <button class="more-card" data-go="settings"><span>⚙</span><b>الإعدادات والنسخ</b><small>استيراد وتصدير البيانات</small><i>←</i></button>
+      </div>
+    </section>
+
+    <section class="page" id="page-map">
+      <div class="page-title"><div><span class="eyebrow">دليل المواقع</span><h1>الرفوف</h1><p>كل رف مخزن مستقل بواجهة أمامية وخلفية، وثلاثة طوابق لكل جهة.</p></div><button class="soft" data-go="more">رجوع</button></div>
+      <div class="page-help"><b>طريقة الاستخدام</b><span>اختر الواجهة والطابق عند إضافة المنتج. تظهر المنتجات في خاناتها، ويمكن إعادة تسميتها أو إضافة خانات أخرى. لكل رف اسم وصورة وموقع مستقل.</span></div>
+      <div id="shelfList" class="shelf-list"></div>
+    </section>
+
+    <section class="page" id="page-alerts">
+      <div class="page-title"><div><span class="eyebrow">المتابعة</span><h1>التنبيهات</h1><p>انخفاض الكميات والصلاحيات القريبة أو المنتهية.</p></div><button class="soft" data-go="more">رجوع</button></div>
+      <div class="page-help"><b>طريقة الاستخدام</b><span>راجع التنبيهات لتحديد المنتجات التي تحتاج إلى تعبئة أو متابعة رصيد المخزن أو تاريخ الصلاحية.</span></div>
+      <div id="alertsList" class="stack empty-state">لا توجد تنبيهات حالياً.</div>
+    </section>
+
+    <section class="page" id="page-receiving">
+      <div class="page-title"><div><span class="eyebrow">توريد ومخزون</span><h1>استلام توريد</h1><p>كل استلام يُحفظ كدفعة مستقلة لتتبع تكلفتها وصلاحيتها.</p></div><button class="soft" data-go="more">رجوع</button></div>
+      <div class="page-help"><b>طريقة الاستخدام</b><span>اختر المنتج وأدخل الكمية والمورد والتكلفة وتاريخ انتهاء الدفعة. تُضاف الكمية للمخزن ويُقترح صرف الدفعة الأقرب انتهاءً أولاً.</span></div>
+      <form id="receivingForm" class="panel settings-panel">
+        <label>المنتج<select id="receivingProduct" required></select></label>
+        <label>الكمية المستلمة<input id="receivingQty" type="number" inputmode="numeric" pattern="[0-9]*" min="1" step="1" required></label>
+        <label>المورد<input id="receivingSupplier" autocomplete="organization" required></label>
+        <label>تكلفة الوحدة (د.ع)<input id="receivingCost" type="number" inputmode="decimal" min="0" step="0.01" required></label>
+        <label>تاريخ انتهاء الصلاحية<input id="receivingExpiry" type="date" required></label>
+        <label>اسم مستلم التوريد<input id="receivingActor" autocomplete="name" required></label>
+        <label>ملاحظة<input id="receivingNote" placeholder="رقم الفاتورة أو ملاحظة اختيارية"></label>
+        <button class="primary wide" type="submit">حفظ الاستلام</button>
+      </form>
+      <div class="section-head"><div><h2>الدفعات المسجلة</h2><p>ترتيب حسب أقرب تاريخ انتهاء</p></div></div>
+      <div id="lotList" class="stack empty-state">لا توجد دفعات مسجلة بعد.</div>
+    </section>
+
+    <section class="page" id="page-stocktake">
+      <div class="page-title"><div><span class="eyebrow">جرد المخزون</span><h1>الجرد الفعلي</h1><p>مرتبط مباشرة بأرصدة المنتجات وسجل الحركات.</p></div><button class="soft" data-go="movement">رجوع للحركات</button></div>
+      <div class="page-help"><b>طريقة الاستخدام</b><span>افتح الجرد من صفحة الحركات. حدد نطاق المخزون، امسح المنتجات وأدخل الكميات الفعلية، ثم راجع الفروقات واعتمدها لتحديث أرصدة المنتجات والدفعات وسجل الحركة معاً.</span></div>
+      <form id="stocktakeForm" class="panel settings-panel">
+        <label>نطاق الجرد<select id="stocktakeZone"><option value="store">المخزن</option><option value="fridge">البراد</option></select></label>
+        <div class="movement-product-picker full" id="stocktakePicker">
+          <label for="stocktakeSearch">الباركود أو المنتج</label>
+          <input id="stocktakeSearch" autocomplete="off" placeholder="امسح الباركود أو ابحث بالاسم" aria-controls="stocktakeResults">
+          <div id="stocktakeResults" class="movement-product-results" role="listbox"></div>
+        </div>
+        <label>الكمية الفعلية<input id="stocktakeQty" type="number" inputmode="numeric" pattern="[0-9]*" min="0" step="1" value="0" required></label>
+        <label>اسم منفذ الجرد<input id="stocktakeActor" autocomplete="name" required></label>
+        <button class="primary wide" type="submit">إضافة للجرد</button>
+      </form>
+      <div class="section-head"><div><h2>مراجعة الجرد</h2><p>تحقق من كل فرق قبل الحفظ</p></div></div>
+      <div id="stocktakeList" class="stack empty-state">لم تتم إضافة منتجات للجرد.</div>
+      <button class="primary wide" type="button" id="confirmStocktake" disabled>تأكيد الفروقات وحفظها</button>
+      <button class="soft wide" type="button" id="clearStocktake">إلغاء الجرد الحالي</button>
+    </section>
+
+    <section class="page" id="page-reports">
+      <div class="page-title"><div><span class="eyebrow">متابعة المخزون</span><h1>تقارير المخزون</h1><p>ملخص يومي للنواقص والركود والتالف والصلاحيات القريبة.</p></div><button class="soft" data-go="more">رجوع</button></div>
+      <div class="page-help"><b>طريقة الاستخدام</b><span>تُحسب الصلاحية من الدفعات المسجلة. تظهر المنتجات التي لم تسجل لها حركة خلال 30 يوماً ضمن الراكدة، وقد تحتاج مراجعة يدوية.</span></div>
+      <div id="inventoryReports" class="stack"></div>
+    </section>
+
+    <section class="page" id="page-settings">
+      <div class="page-title"><div><span class="eyebrow">البيانات والجهاز</span><h1>الإعدادات</h1><p>تحكم ببياناتك ونسخك الاحتياطية.</p></div><button class="soft" data-go="more">رجوع</button></div>
+      <div class="page-help"><b>طريقة الاستخدام</b><span>صدّر نسخة احتياطية بانتظام. استيراد النسخة الاحتياطية يستبدل البيانات الحالية، أما استيراد المنتجات الدفعي فيضيف المنتجات فقط. وخيار الحذف يمسح المنتجات والحركات ويعيد إعداد الرفين الافتراضيين.</span></div>
+      <div class="panel settings-panel">
+        <h3>إضافة منتجات دفعة واحدة</h3>
+        <p>استورد مئات المنتجات من Excel أو CSV. راجع مطابقة الأعمدة، واكتشف الأخطاء والتكرار، ثم اعتمد المنتجات دون حذف بياناتك الحالية.</p>
+        <div class="bulk-import-actions">
+          <label class="upload-btn">اختيار ملف Excel أو CSV<input type="file" id="bulkFile" accept=".xlsx,.xls,.csv,text/csv,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"></label>
+          <button type="button" class="soft" id="downloadImportTemplate">تنزيل نموذج CSV</button>
+        </div>
+        <div id="bulkImportPanel" class="bulk-import-panel hidden">
+          <div class="bulk-file-bar"><b id="bulkFileName"></b><button type="button" class="small-btn" id="cancelBulkImport">إلغاء الاستيراد</button></div>
+          <div id="workbookSheetWrap" class="bulk-options hidden"><label>ورقة Excel<select id="workbookSheet"></select></label></div>
+          <div id="csvDelimiterWrap" class="bulk-options hidden"><label>فاصل CSV<select id="csvDelimiter"><option value="auto">تلقائي</option><option value=",">فاصلة ,</option><option value=";">فاصلة منقوطة ;</option><option value="tab">Tab</option></select></label></div>
+          <div class="bulk-section-heading"><b>مطابقة الأعمدة</b><span>طابق كل حقل مع العمود المقابل له في ملفك.</span></div>
+          <div id="bulkColumnMapping" class="bulk-column-mapping"></div>
+          <div class="bulk-options">
+            <label>إذا كان المنتج موجوداً مسبقاً<select id="bulkDuplicatePolicy"><option value="skip">تخطيه والحفاظ على بياناته</option><option value="update">تحديثه بالحقول المعبأة في الملف</option></select></label>
+          </div>
+          <p class="bulk-import-note">يُكتشف التكرار بالباركود، أو بتطابق اسم المنتج والعلامة التجارية والحجم عند غياب الباركود.</p>
+          <div class="bulk-summary" id="bulkSummary"></div>
+          <div id="bulkImportErrors" class="bulk-import-errors hidden"></div>
+          <div class="bulk-preview-wrap"><table class="bulk-preview-table"><thead id="bulkPreviewHead"></thead><tbody id="bulkPreviewBody"></tbody></table></div>
+          <div class="bulk-preview-footer"><span id="bulkPreviewCount"></span><button type="button" class="primary" id="commitBulkImport" disabled>إضافة المنتجات</button></div>
+          <div id="bulkImportStatus" class="bulk-import-status" role="status" aria-live="polite"></div>
+        </div>
+        <div class="imported-batches">
+          <div class="section-head"><div><h3>الملفات المستوردة</h3><p>احذف منتجات دفعة بعينها دون المساس ببقية المخزون.</p></div></div>
+          <div class="import-batch-controls"><select id="importBatchSelect" aria-label="اختر دفعة مستوردة"><option value="">لا توجد دفعات مستوردة</option></select><button type="button" class="danger" id="deleteImportBatch" disabled>حذف الدفعة</button></div>
+          <p class="hint">تُسجّل الدفعات الجديدة من الآن فصاعداً. حذف الدفعة يحذف منتجاتها وسجل الحركات المرتبط بها؛ المنتجات المستوردة قبل هذا التحديث لا تحمل معرّف دفعة.</p>
+        </div>
+        <h3>النسخ الاحتياطي</h3><p>يتضمن الملف المنتجات والحركات والرفوف وصورها.</p>
+        <button class="primary wide" id="exportBtn">↓ تصدير نسخة احتياطية</button>
+        <label class="upload-btn">↑ استيراد نسخة احتياطية<input type="file" id="importFile" accept="application/json"></label>
+        <p id="automaticBackupStatus" class="hint">النسخ التلقائي اليومي محفوظ محلياً على هذا الجهاز.</p>
+        <div class="import-batch-controls"><select id="automaticBackupSelect" aria-label="اختر نسخة تلقائية"><option value="">لا توجد نسخ تلقائية</option></select><button type="button" class="soft" id="restoreAutomaticBackup" disabled>استعادة</button></div>
+        <hr><h3>بيانات اختيارية</h3><p>لا تُضاف أي منتجات تجريبية تلقائياً. يمكنك إضافة أمثلة توضيحية عند الحاجة.</p>
+        <button class="soft wide" id="addDemoProducts">إضافة بيانات تجريبية اختيارياً</button>
+        <hr><h3>التنبيهات</h3><p>إشعارات Push عند إغلاق التطبيق مؤجلة لحين تجهيز خادم أو مشروع Firebase لإرسالها. يمكن تفعيل إشعارات الجهاز المدعومة عند فتح التطبيق.</p>
+        <button class="soft wide" id="enableNotify">تفعيل إشعارات الجهاز</button>
+        <hr><h3>التطبيق</h3><p>يمكن تثبيت العصائر على الشاشة الرئيسية من قائمة المشاركة في Safari.</p>
+        <button class="danger wide" id="clearData">حذف جميع البيانات</button>
+      </div>
+      <p class="hint">البيانات محلية على هذا الجهاز ولا تتم مزامنتها تلقائياً. احتفظ بنسخة احتياطية قبل تغيير الجهاز أو المتصفح.</p>
+    </section>
+  </main>
+</div>
+
+<nav class="bottom-nav" aria-label="التبويبات الرئيسية">
+  <button class="nav-item active" data-page="home"><span class="nav-icon">⌂</span><small>الرئيسية</small></button>
+  <button class="nav-item" data-page="products"><span class="nav-icon">▦</span><small>المنتجات</small></button>
+  <button class="nav-item" data-page="scan"><span class="nav-icon">▥</span><small>المسح</small></button>
+  <button class="nav-item" data-page="replenish"><span class="nav-icon">↗</span><small>التعبئة</small></button>
+  <button class="nav-item" data-page="movement"><span class="nav-icon">⇄</span><small>الحركات</small></button>
+  <button class="nav-item" data-page="more"><span class="nav-icon">•••</span><small>المزيد</small></button>
+</nav>
+
+<div class="modal hidden" id="productDetailsModal" role="dialog" aria-modal="true" aria-labelledby="productDetailsTitle">
+  <div class="modal-card product-details-card">
+    <div class="modal-head"><div><span class="eyebrow">تفاصيل المنتج</span><h2 id="productDetailsTitle"></h2></div><button class="close" data-close="productDetailsModal" aria-label="إغلاق">×</button></div>
+    <div class="product-details-content">
+      <div class="product-details-hero"><img id="productDetailsImage" alt=""><div><span id="productDetailsBrand"></span><h3 id="productDetailsName"></h3><p id="productDetailsDescription"></p><div class="product-details-price"><small>سعر البيع</small><b id="productDetailsPrice"></b></div></div></div>
+      <div class="product-details-quantities"><div><small>البراد</small><b id="productDetailsFridge"></b></div><div><small>المخزن</small><b id="productDetailsStore"></b></div><div><small>هدف البراد</small><b id="productDetailsTarget"></b></div></div>
+      <dl class="product-details-list" id="productDetailsList"></dl>
+      <div class="product-details-actions"><button type="button" class="primary" id="productDetailsEdit">تعديل المنتج</button><button type="button" class="soft" id="productDetailsMove">تسجيل حركة</button></div>
+    </div>
+  </div>
+</div>
+
+<div class="modal hidden" id="imageCropModal" role="dialog" aria-modal="true" aria-labelledby="imageCropTitle">
+  <div class="modal-card crop-modal-card">
+    <div class="modal-head"><div><span class="eyebrow">تحرير صورة المنتج</span><h2 id="imageCropTitle">حدد الجزء الذي يظهر فيه المنتج</h2></div><button class="close" type="button" id="cancelImageCrop" aria-label="إلغاء القص">×</button></div>
+    <p class="crop-help">اسحب على الصورة لرسم إطار حول المنتج، ثم اضغط «استخدام الجزء المحدد».</p>
+    <div class="crop-canvas-wrap"><canvas id="imageCropCanvas" aria-label="اسحب لتحديد منطقة قص صورة المنتج"></canvas></div>
+    <div class="crop-actions"><button type="button" class="soft" id="resetImageCrop">تحديد الصورة كاملة</button><button type="button" class="primary" id="saveImageCrop" disabled>استخدام الجزء المحدد</button></div>
+  </div>
+</div>
+
+<div class="modal hidden" id="productModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+  <div class="modal-card">
+    <div class="modal-head"><div><span class="eyebrow">كتالوج المنتجات</span><h2 id="modalTitle">إضافة منتج</h2></div><button class="close" data-close="productModal" aria-label="إغلاق">×</button></div>
+    <form id="productForm" class="form-grid">
+      <input type="hidden" id="productId">
+      <label class="full">اسم المنتج *<input id="pName" required placeholder="مثلاً: عصير برتقال"></label>
+      <label>العلامة التجارية<input id="pBrand" list="brandOptions" placeholder="اختر أو ابحث عن علامة تجارية" autocomplete="off"><datalist id="brandOptions"></datalist></label>
+      <div class="flavor-picker">
+        <label for="pFlavor">النكهة أو الطعم</label>
+        <div class="flavor-picker-row"><input id="pFlavor" autocomplete="off" placeholder="ابحث عن نكهة أو اكتبها"><button type="button" class="soft" id="addFlavor">＋ إضافة نكهة جديدة</button></div>
+        <div id="flavorPickerResults" class="flavor-picker-results" role="listbox" aria-label="النكهات المقترحة"></div>
+      </div>
+      <label>الحجم<select id="pSize"><option value="">اختر الحجم</option></select></label>
+      <label>سعر البيع (د.ع)<input id="pPrice" type="number" inputmode="decimal" min="0" step="any" placeholder="أدخل سعر المنتج"></label>
+      <label>رقم الباركود<input id="pBarcode" inputmode="numeric" placeholder="امسح أو أدخل الرقم"></label>
+      <div class="image-field full"><div class="image-field-head"><b>صورة المنتج</b><small>صوّر العبوة أو اخترها، ثم قصّ الصورة لتحديد المنتج</small></div><div class="image-actions"><label class="upload-btn">التقاط صورة<input id="pImageCamera" type="file" accept="image/*" capture="environment"></label><label class="upload-btn">اختيار من المعرض<input id="pImageGallery" type="file" accept="image/*"></label></div><div class="image-preview" id="pImagePreview"><span>لم تتم إضافة صورة المنتج</span></div></div>
+      <div class="image-field full"><div class="image-field-head"><b>صورة الباركود</b><small>صورة الرمز المطبوع على العبوة للرجوع إليها</small></div><div class="image-actions"><label class="upload-btn">تصوير الباركود<input id="pBarcodeCamera" type="file" accept="image/*" capture="environment"></label><label class="upload-btn">اختيار من المعرض<input id="pBarcodeGallery" type="file" accept="image/*"></label></div><div class="image-preview barcode-preview" id="pBarcodePreview"><span>لم تتم إضافة صورة الباركود</span></div></div>
+      <label>كمية البراد<input id="pFridge" type="number" inputmode="numeric" pattern="[0-9]*" min="0" step="1" value="0"></label>
+      <label>وحدة كمية البراد<select id="pFridgeUnit"><option value="piece">قطعة</option><option value="carton">صندوق كامل</option></select></label>
+      <label>كمية المخزن<input id="pStore" type="number" inputmode="numeric" pattern="[0-9]*" min="0" step="1" value="0"></label>
+      <label>وحدة كمية المخزن<select id="pStoreUnit"><option value="piece">قطعة</option><option value="carton">صندوق كامل</option></select></label>
+      <p class="full hint" id="productBoxSummary" aria-live="polite">أدخل عدد القطع في الصندوق لعرض عدد الصناديق الكاملة والقطع المتبقية.</p>
+      <label class="full">حالة التوفر<select id="pAvailability"><option value="available">متوفر / تابع تنبيهات المخزون</option><option value="unavailable">غير متوفر حالياً</option></select><small class="hint">إذا لم تتوفر كمية للمنتج اختر «غير متوفر» لإظهار حالته بدلاً من تنبيه التعبئة.</small></label>
+      <label>هدف البراد (قطعة)<input id="pTarget" type="number" inputmode="numeric" pattern="[0-9]*" min="0" step="1" value="10"></label>
+      <label>حد تنبيه المخزن<input id="pMin" type="number" inputmode="numeric" pattern="[0-9]*" min="0" step="1" value="5"></label>
+      <label>عدد القطع في الصندوق<input id="pCarton" type="number" inputmode="numeric" pattern="[0-9]*" min="1" step="1" value="1"></label>
+      <label>الرف<select id="pShelf" required></select></label>
+      <label>قسم الرف<select id="pSection" required></select></label>
+      <label>رمز الموقع<input id="pLocation" list="locationOptions" placeholder="اختر أو اكتب رمز الموقع" autocomplete="off"><datalist id="locationOptions"></datalist></label>
+      <label>ثبات الموقع<select id="pLocationType"><option value="fixed">ثابت</option><option value="variable">متغير</option></select></label>
+      <label class="full">تاريخ الصلاحية<input id="pExpiry" type="date"></label>
+      <label class="full">ملاحظات<input id="pNotes" placeholder="أي تفاصيل إضافية"></label>
+      <button class="primary full" type="submit">حفظ المنتج</button>
+    </form>
+  </div>
+</div>
+<div class="modal hidden" id="shelfModal" role="dialog" aria-modal="true" aria-labelledby="shelfModalTitle">
+  <div class="modal-card shelf-modal-card">
+    <div class="modal-head"><div><span class="eyebrow">تنظيم المخزن</span><h2 id="shelfModalTitle">تعديل بيانات الرف</h2></div><button class="close" data-close="shelfModal" aria-label="إغلاق">×</button></div>
+    <form id="shelfForm" class="form-grid">
+      <input type="hidden" id="shelfId">
+      <label class="full">اسم الرف *<input id="shelfName" required maxlength="50" placeholder="مثلاً: رف المشروبات الباردة"></label>
+      <label class="full">المكان أو الوصف<input id="shelfLocation" maxlength="100" placeholder="مثلاً: الجدار الشرقي - بجانب الباب"></label>
+      <div class="image-field full">
+        <div class="image-field-head"><b>صورة الرف</b><small>اختيار صورة من الجهاز أو التقاطها بالكاميرا</small></div>
+        <div class="image-actions"><label class="upload-btn">التقاط صورة<input id="shelfCamera" type="file" accept="image/*" capture="environment"></label><label class="upload-btn">اختيار صورة<input id="shelfGallery" type="file" accept="image/*"></label></div>
+        <div class="image-preview" id="shelfImagePreview"><span>لم تتم إضافة صورة للرف</span></div>
+      </div>
+      <button class="primary full" type="submit">حفظ الرف</button>
+    </form>
+  </div>
+</div>
+<div class="modal hidden" id="sectionModal" role="dialog" aria-modal="true" aria-labelledby="sectionModalTitle">
+  <div class="modal-card shelf-modal-card">
+    <div class="modal-head"><div><span class="eyebrow">تقسيم الرف</span><h2 id="sectionModalTitle">إضافة قسم</h2></div><button class="close" data-close="sectionModal" aria-label="إغلاق">×</button></div>
+    <form id="sectionForm" class="form-grid">
+      <input type="hidden" id="sectionShelfId">
+      <input type="hidden" id="sectionId">
+      <label class="full">اسم القسم *<input id="sectionName" required maxlength="50" placeholder="مثلاً: القسم العلوي"></label>
+      <label>الواجهة<select id="sectionFace"><option value="front">الأمامية</option><option value="back">الخلفية</option></select></label>
+      <label>الطابق<select id="sectionLevel"><option value="1">الطابق الأول</option><option value="2">الطابق الثاني</option><option value="3">الطابق الثالث</option></select></label>
+      <label>نوع القسم<select id="sectionType"><option value="open-shelf">رف مفتوح</option><option value="drawer">درج</option><option value="box">صندوق</option><option value="cooler">قسم مبرد</option></select></label>
+      <label>شكل العرض<select id="sectionShape"><option value="wide">مستطيل عريض</option><option value="standard">مستطيل</option><option value="square">مربع</option></select></label>
+      <button class="primary full" type="submit">حفظ القسم</button>
+    </form>
+  </div>
+</div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<script src="app.js"></script>
+<script src="image-crop.js"></script>
+<script src="enhancements.js"></script>
+<script src="bulk-import.js"></script>
+</body>
+</html>
